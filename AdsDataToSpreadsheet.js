@@ -1,13 +1,15 @@
 function main() {
-  var dates = getWeekToDateRange();
-  console.log(dates)
+  var dates = generateReportDates();
+  
+  weekToDateData = getPerformanceDataForDateRange(dates.startOfMonth, dates.end)
+  console.log(weekToDateData);
 }
 
 function getPerformanceDataForDateRange(startDate, endDate) {
   var report = AdsApp.report(
   "SELECT CampaignName, Cost, Clicks, Impressions, Conversions " +
   "FROM CAMPAIGN_PERFORMANCE_REPORT " +
-  "DURING LAST_7_DAYS" + startDate + "," + endDate
+  "DURING " + startDate + "," + endDate
   );
   
   var rows = report.rows();
@@ -26,7 +28,7 @@ function getPerformanceDataForDateRange(startDate, endDate) {
   return data;
 }
 
-function getWeekToDateRange() {
+function generateReportDates() {
   // Get today's date
   var today = new Date();
 
@@ -51,7 +53,7 @@ function getWeekToDateRange() {
       if (month.length < 2) month = '0' + month;
       if (day.length < 2) day = '0' + day;
 
-      return [year, month, day].join('-');
+      return [year, month, day].join('');
   };
 
   return {
